@@ -20,8 +20,7 @@ fn parse_input(input: &str) -> (Vec<VecDeque<char>>, Vec<CargoMove>) {
 
     let stacks: Vec<VecDeque<_>> = stack
         .lines()
-        .rev()
-        .next()
+        .next_back()
         .unwrap()
         .match_indices(|c: char| c.is_ascii_digit())
         .map(|(m, _)| {
@@ -30,13 +29,12 @@ fn parse_input(input: &str) -> (Vec<VecDeque<char>>, Vec<CargoMove>) {
                 .rev()
                 .skip(1)
                 .filter_map(|line| {
-                    line.chars().nth(m).map(|c| match c {
+                    line.chars().nth(m).and_then(|c| match c {
                         'A'..='Z' => Some(c),
                         ' ' => None,
                         _ => panic!("Unexpected character: {}", c),
                     })
                 })
-                .flatten()
                 .collect()
         })
         .collect();
